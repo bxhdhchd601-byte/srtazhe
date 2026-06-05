@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Space Network Co-op</title>
+    <style>
+        body { margin: 0; background-color: #000; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; color: white;}
+        canvas { border: 2px solid #333; background-color: #050505; }
+        #role { margin-bottom: 10px; font-size: 20px; color: #00f0ff; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div id="role">Подключение к серверу...</div>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
