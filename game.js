@@ -101,10 +101,14 @@ document.addEventListener('visibilitychange', () => {
 
 document.addEventListener('mouseleave', resetInputStates);
 
-canvas.addEventListener('mousemove', (e) => {
+window.addEventListener('mousemove', (e) => {
     const rect = canvas.getBoundingClientRect();
     mouse.x = e.clientX - rect.left;
     mouse.y = e.clientY - rect.top;
+});
+
+window.addEventListener('mouseout', (e) => {
+    if (!e.relatedTarget) resetInputStates();
 });
 
 canvas.addEventListener('mousedown', (e) => {
@@ -182,7 +186,7 @@ function restartGame() {
 }
 
 function advanceLevelIfNeeded() {
-    if (currentLevel < levels.length && score >= currentLevelData.scoreForNext) {
+    if (gameMode === 'coop' && currentLevel < levels.length && score >= currentLevelData.scoreForNext) {
         currentLevel += 1;
         currentLevelData = levels[currentLevel - 1];
         initStars();
