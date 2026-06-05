@@ -113,8 +113,7 @@ window.addEventListener('mouseout', (e) => {
 
 canvas.addEventListener('mousedown', (e) => {
     if (e.button === 0) {
-        const needsRestart = gameMode === 'coop' ? ship.isDead && ship2.isDead : ship.isDead;
-        if (needsRestart) {
+        if (ship.isDead) {
             restartGame();
         } else {
             mouse.isDown = true;
@@ -129,6 +128,90 @@ canvas.addEventListener('mouseup', (e) => {
 canvas.addEventListener('mouseleave', () => {
     mouse.isDown = false;
 });
+
+const touchState = {
+    moveTouchId: null,
+    shootTouchId: null,
+    moveX: 0,
+    moveY: 0,
+    shooting: false,
+    shootX: 0,
+    shootY: 0
+};
+
+function updateTouchMovement(touch) {
+    const rect = canvas.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+    if (x < rect.width / 2) {
+        touchState.moveX = x;
+        touchState.moveY = y;
+    } else {
+        touchState.shootX = x;
+        touchState.shootY = y;
+    }
+}
+
+canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    for (let i = 0; i < e.changedTouches.length; i++) {
+        const touch = e.changedTouches[i];
+        const rect = canvas.getBoundingClientRect();
+        const x = touch.clientX - rect.left;
+        if (x < rect.width / 2 && touchState.moveTouchId === null) {
+            touchState.moveTouchId = touch.identifier;
+            updateTouchMovement(touch);
+        } else if (x >= rect.width / 2 && touchState.shootTouchId === null) {
+            touchState.shootTouchId = touch.identifier;
+            updateTouchMovement(touch);
+            touchState.shooting = true;
+        }
+    }
+});
+
+canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    for (let i = 0; i < e.changedTouches.length; i++) {
+        const touch = e.changedTouches[i];
+        if (touch.identifier === touchState.moveTouchId || touch.identifier === touchState.shootTouchId) {
+            updateTouchMovement(touch);
+        }
+    }
+});
+
+canvas.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    for (let i = 0; i < e.changedTouches.length; i++) {
+        const touch = e.changedTouches[i];
+        if (touch.identifier === touchState.moveTouchId) {
+            touchState.moveTouchId = null;
+            touchState.moveX = 0;
+            touchState.moveY = 0;
+        }
+        if (touch.identifier === touchState.shootTouchId) {
+            touchState.shootTouchId = null;
+            touchState.shooting = false;
+        }
+    }
+});
+
+function applyTouchInput() {
+    if (touchState.moveTouchId !== null) {
+        const dx = touchState.moveX - canvas.width / 4;
+        const dy = touchState.moveY - canvas.height / 2;
+        ship.x += Math.sign(dx) * ship.speed;
+        ship.y += Math.sign(dy) * ship.speed;
+        if (ship.x < 20) ship.x = 20;
+        if (ship.x > currentLevelData.width - 20) ship.x = currentLevelData.width - 20;
+        if (ship.y < 20) ship.y = 20;
+        if (ship.y > 580) ship.y = 580;
+    }
+    if (touchState.shooting) {
+        mouse.x = touchState.shootX;
+        mouse.y = touchState.shootY;
+        mouse.isDown = true;
+    }
+}
 
 function createExplosion(x, y, color, amount) {
     for (let i = 0; i < amount; i++) {
@@ -379,23 +462,6 @@ function startGame() {
     if (menu) menu.style.display = 'none';
 }
 
-function setMode(mode) {
-    gameMode = mode;
-    if (coopHint && networkHint) {
-        if (mode === 'coop') {
-            coopHint.textContent = 'Режим «Играть с другом» активирован. У вас общий счёт — уровень меняется вместе.';
-            networkHint.textContent = 'Сетевой режим работает через сервер. Нажми Начать игру после запуска node server.js.';
-        } else if (mode === 'online') {
-            coopHint.textContent = 'Онлайн-режим активирован. Подключись к серверу и играй с другом через сеть.';
-            networkHint.textContent = 'Запусти node server.js, затем открой игру на своём и другом устройстве.';
-        } else {
-            coopHint.textContent = 'В кооперативе: игрок 1 — WASD + мышь, игрок 2 — стрелки + пробел.';
-            networkHint.textContent = 'Сетевой режим работает через сервер. Нажми Начать игру после запуска node server.js.';
-        }
-    }
-    updateModeButtons();
-}
-
 function update() {
     if (!gameStarted) return;
     if (gameMode === 'online') {
@@ -403,6 +469,8 @@ function update() {
         return;
     }
     if (gameMode === 'coop' ? ship.isDead && ship2.isDead : ship.isDead) return;
+
+    applyTouchInput();
 
     if (gameMode === 'coop' && !ship2.isDead) {
         cameraX = ((ship.x + ship2.x) / 2) - canvas.width / 2;
@@ -569,6 +637,67 @@ function draw() {
         ctx.fillRect(p.x, p.y, p.size, p.size);
     });
     ctx.globalAlpha = 1;
+
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#00f0ff';
+    bullets.forEach(b => {
+        ctx.beginPath();
+        ctx.moveTo(b.x, b.y);
+        ctx.lineTo(b.x - Math.cos(b.angle) * 20, b.y - Math.sin(b.angle) * 20);
+        ctx.stroke();
+    });
+
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    enemies.forEach(e => {
+        ctx.save();
+        ctx.translate(e.x, e.y);
+        ctx.rotate(e.angle);
+        ctx.beginPath();
+        ctx.moveTo(0, -e.size);
+        ctx.lineTo(e.size, 0);
+        ctx.lineTo(0, e.size);
+        ctx.lineTo(-e.size, 0);
+        ctx.closePath();
+        ctx.stroke();
+        ctx.fillStyle = '#ff3333';
+        ctx.fillRect(-2, -2, 4, 4);
+        ctx.restore();
+    });
+
+    if (!ship.isDead) {
+        ctx.save();
+        ctx.translate(ship.x, ship.y);
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(0, -25);
+        ctx.lineTo(18, 15);
+        ctx.lineTo(0, 8);
+        ctx.lineTo(-18, 15);
+        ctx.closePath();
+        ctx.stroke();
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.moveTo(0, -8);
+        ctx.lineTo(6, 8);
+        ctx.lineTo(0, 4);
+        ctx.lineTo(-6, 8);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+
+        ctx.save();
+        ctx.translate(ship.x, ship.y);
+        ctx.rotate(ship.turretAngle);
+        ctx.strokeStyle = '#00f0ff';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(12, 0);
+        ctx.lineTo(35, 0);
+        ctx.stroke();
+        ctx.restore();
+    }
 
     if (gameMode === 'online') {
         drawOnlineEntities();
@@ -747,6 +876,23 @@ function updateModeButtons() {
         const mode = button.dataset.mode;
         button.classList.toggle('selected', mode === gameMode);
     });
+}
+
+function setMode(mode) {
+    gameMode = mode;
+    if (coopHint && networkHint) {
+        if (mode === 'coop') {
+            coopHint.textContent = 'Режим «Играть с другом» активирован. У вас общий счёт — уровень меняется вместе.';
+            networkHint.textContent = 'Сетевой режим работает через сервер. Нажми Начать игру после запуска node server.js.';
+        } else if (mode === 'online') {
+            coopHint.textContent = 'Онлайн-режим активирован. Подключись к серверу и играй с другом через сеть.';
+            networkHint.textContent = 'Запусти node server.js, затем открой игру на своём и другом устройстве.';
+        } else {
+            coopHint.textContent = 'В кооперативе: игрок 1 — WASD + мышь, игрок 2 — стрелки + пробел.';
+            networkHint.textContent = 'Сетевой режим работает через сервер. Нажми Начать игру после запуска node server.js.';
+        }
+    }
+    updateModeButtons();
 }
 
 if (levelSelector) {

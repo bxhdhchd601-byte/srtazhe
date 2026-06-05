@@ -14,8 +14,9 @@
         #levelSelector button, #modeSelector button { margin-right: 6px; padding: 8px 14px; border: 1px solid #00f0ff; background: transparent; color: #00f0ff; cursor: pointer; font-size: 14px; }
         #levelSelector button.selected, #modeSelector button.selected { background: #00f0ff; color: #000; }
         #coopHint, #networkHint { margin: 10px 0 0; font-size: 14px; color: #b8f1ff; }
+        #touchHint { margin: 10px 0 0; font-size: 14px; color: #b8f1ff; }
         #startButton { margin-top: 16px; padding: 12px 20px; border: 2px solid #00f0ff; background: #00f0ff; color: #000; cursor: pointer; font-size: 16px; }
-        canvas { border: 2px solid #333; background-color: #050505; }
+        canvas { display: block; border: 2px solid #333; background-color: #050505; width: min(92vw, 900px); height: min(80vh, 650px); max-width: 100%; max-height: 100%; }
     </style>
 </head>
 <body>
@@ -36,11 +37,12 @@
                 <button data-mode="online">Сетевой</button>
             </div>
             <p id="coopHint">В кооперативе: игрок 1 — WASD + мышь, игрок 2 — стрелки + пробел. У вас общий счёт — уровень меняется вместе.</p>
-            <p id="networkHint">Сетевой режим работает через сервер. Нажми Начать игру после запуска node server.js.</p>
+            <p id="networkHint">Сетевой режим работает через сервер. Нажми Начать игру после запуска node server.js. Открой на своём телефоне или другом устройстве http://IP_сервера:3000.</p>
+            <p id="touchHint">На телефоне: касание левой половины экрана двигает корабль, правая половина — стреляет.</p>
             <button id="startButton">Начать игру</button>
         </div>
     </div>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <canvas id="gameCanvas" width="900" height="650"></canvas>
     <script src="game.js"></script>
 </body>
 </html>
