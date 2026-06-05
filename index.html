@@ -13,7 +13,7 @@
         #levelSelector span, #modeSelector span { margin-right: 10px; font-size: 16px; }
         #levelSelector button, #modeSelector button { margin-right: 6px; padding: 8px 14px; border: 1px solid #00f0ff; background: transparent; color: #00f0ff; cursor: pointer; font-size: 14px; }
         #levelSelector button.selected, #modeSelector button.selected { background: #00f0ff; color: #000; }
-        #coopHint { margin: 10px 0 0; font-size: 14px; color: #b8f1ff; }
+        #coopHint, #networkHint { margin: 10px 0 0; font-size: 14px; color: #b8f1ff; }
         #startButton { margin-top: 16px; padding: 12px 20px; border: 2px solid #00f0ff; background: #00f0ff; color: #000; cursor: pointer; font-size: 16px; }
         canvas { border: 2px solid #333; background-color: #050505; }
     </style>
@@ -33,8 +33,10 @@
                 <span>Режим игры:</span>
                 <button data-mode="single" class="selected">Одиночная</button>
                 <button data-mode="coop">Кооператив</button>
+                <button data-mode="online">Сетевой</button>
             </div>
-            <p id="coopHint">Для режима «Играть с другом» пока показаны настройки. Настоящее подключение по Bluetooth требует отдельной разработки.</p>
+            <p id="coopHint">В кооперативе: игрок 1 — WASD + мышь, игрок 2 — стрелки + пробел. У вас общий счёт — уровень меняется вместе.</p>
+            <p id="networkHint">Сетевой режим работает через сервер. Нажми Начать игру после запуска node server.js.</p>
             <button id="startButton">Начать игру</button>
         </div>
     </div>
