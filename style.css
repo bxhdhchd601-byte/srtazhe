@@ -1,0 +1,37 @@
+body {
+    margin: 0;
+    background: #050505;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    color: #fff;
+}
+
+#game-container {
+    position: relative;
+    border: 2px solid #333;
+    box-shadow: 0 0 50px rgba(0, 240, 255, 0.15);
+}
+
+canvas {
+    display: block;
+    background: #000;
+    cursor: crosshair;
+}
+
+/* Эффект легкого свечения */
+canvas {
+    filter: drop-shadow(0 0 2px #00f0ff);
+}
+#game-container {
+    overflow-x: auto; /* Появится скролл, если уровень шире экрана */
+    max-width: 95vw;
+}
+canvas {
+    display: block;
+    background: #000;
+    cursor: crosshair;
+    /* Убери здесь width: 800px! */
+}

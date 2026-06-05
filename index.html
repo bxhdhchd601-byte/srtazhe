@@ -4,16 +4,41 @@
     <meta charset="UTF-8">
     <title>Space Network Co-op</title>
     <style>
-        body { margin: 0; background-color: #000; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; color: white;}
+        body { margin: 0; background-color: #000; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; color: white; }
+        #menu { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.94); z-index: 10; }
+        #menuContent { text-align: center; padding: 30px 40px; border: 1px solid rgba(0, 255, 255, 0.25); background: rgba(0, 0, 0, 0.8); box-shadow: 0 0 40px rgba(0, 255, 255, 0.15); }
+        #menuContent h1 { margin: 0 0 10px; font-size: 32px; color: #00f0ff; }
+        #menuContent p { margin: 0 0 20px; color: #fff; }
+        #levelSelector, #modeSelector { margin: 10px 0; }
+        #levelSelector span, #modeSelector span { margin-right: 10px; font-size: 16px; }
+        #levelSelector button, #modeSelector button { margin-right: 6px; padding: 8px 14px; border: 1px solid #00f0ff; background: transparent; color: #00f0ff; cursor: pointer; font-size: 14px; }
+        #levelSelector button.selected, #modeSelector button.selected { background: #00f0ff; color: #000; }
+        #coopHint { margin: 10px 0 0; font-size: 14px; color: #b8f1ff; }
+        #startButton { margin-top: 16px; padding: 12px 20px; border: 2px solid #00f0ff; background: #00f0ff; color: #000; cursor: pointer; font-size: 16px; }
         canvas { border: 2px solid #333; background-color: #050505; }
-        #role { margin-bottom: 10px; font-size: 20px; color: #00f0ff; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div id="role">Подключение к серверу...</div>
+    <div id="menu">
+        <div id="menuContent">
+            <h1>Космический Кооператив</h1>
+            <p>Выберите уровень и нажмите «Начать игру»</p>
+            <div id="levelSelector">
+                <span>Выбор уровня:</span>
+                <button data-level="1" class="selected">Лёгкий</button>
+                <button data-level="2">Средний</button>
+                <button data-level="3">Сложный</button>
+            </div>
+            <div id="modeSelector">
+                <span>Режим игры:</span>
+                <button data-mode="single" class="selected">Одиночная</button>
+                <button data-mode="coop">Кооператив</button>
+            </div>
+            <p id="coopHint">Для режима «Играть с другом» пока показаны настройки. Настоящее подключение по Bluetooth требует отдельной разработки.</p>
+            <button id="startButton">Начать игру</button>
+        </div>
+    </div>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
-
-    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     <script src="game.js"></script>
 </body>
 </html>
