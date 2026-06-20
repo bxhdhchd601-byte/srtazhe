@@ -2,47 +2,47 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Space Network Co-op</title>
-    <style>
-        body { margin: 0; background-color: #000; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; color: white; }
-        #menu { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.94); z-index: 10; }
-        #menuContent { text-align: center; padding: 30px 40px; border: 1px solid rgba(0, 255, 255, 0.25); background: rgba(0, 0, 0, 0.8); box-shadow: 0 0 40px rgba(0, 255, 255, 0.15); }
-        #menuContent h1 { margin: 0 0 10px; font-size: 32px; color: #00f0ff; }
-        #menuContent p { margin: 0 0 20px; color: #fff; }
-        #levelSelector, #modeSelector { margin: 10px 0; }
-        #levelSelector span, #modeSelector span { margin-right: 10px; font-size: 16px; }
-        #levelSelector button, #modeSelector button { margin-right: 6px; padding: 8px 14px; border: 1px solid #00f0ff; background: transparent; color: #00f0ff; cursor: pointer; font-size: 14px; }
-        #levelSelector button.selected, #modeSelector button.selected { background: #00f0ff; color: #000; }
-        #coopHint, #networkHint { margin: 10px 0 0; font-size: 14px; color: #b8f1ff; }
-        #touchHint { margin: 10px 0 0; font-size: 14px; color: #b8f1ff; }
-        #startButton { margin-top: 16px; padding: 12px 20px; border: 2px solid #00f0ff; background: #00f0ff; color: #000; cursor: pointer; font-size: 16px; }
-        canvas { display: block; border: 2px solid #333; background-color: #050505; width: min(92vw, 900px); height: min(80vh, 650px); max-width: 100%; max-height: 100%; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Космический Защитник</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="menu">
-        <div id="menuContent">
-            <h1>Космический Кооператив</h1>
-            <p>Выберите уровень и нажмите «Начать игру»</p>
-            <div id="levelSelector">
-                <span>Выбор уровня:</span>
-                <button data-level="1" class="selected">Лёгкий</button>
-                <button data-level="2">Средний</button>
-                <button data-level="3">Сложный</button>
+    <div id="game-container">
+        <!-- ГЛАВНОЕ МЕНЮ -->
+        <div id="mainMenu">
+            <div id="menuContent">
+                <h1>КОСМИЧЕСКИЙ ЗАЩИТНИК</h1>
+                <p>Выберите уровень и нажмите «Начать игру»</p>
+                <div id="levelSelector">
+                    <span>УРОВЕНЬ:</span>
+                    <button data-level="1" class="selected">ЛЁГКИЙ</button>
+                    <button data-level="2">СРЕДНИЙ</button>
+                    <button data-level="3">СЛОЖНЫЙ</button>
+                </div>
+                <p id="controlsHint">
+                    УПРАВЛЕНИЕ: WASD — движение, МЫШЬ — прицел, ЛКМ — стрельба<br>
+                    ESC — пауза
+                </p>
+                <button id="startButton">НАЧАТЬ ИГРУ</button>
             </div>
-            <div id="modeSelector">
-                <span>Режим игры:</span>
-                <button data-mode="single" class="selected">Одиночная</button>
-                <button data-mode="coop">Кооператив</button>
-                <button data-mode="online">Сетевой</button>
-            </div>
-            <p id="coopHint">В кооперативе: игрок 1 — WASD + мышь, игрок 2 — стрелки + пробел. У вас общий счёт — уровень меняется вместе.</p>
-            <p id="networkHint">Сетевой режим работает через сервер. Нажми Начать игру после запуска node server.js. Открой на своём телефоне или другом устройстве http://IP_сервера:3000.</p>
-            <p id="touchHint">На телефоне: касание левой половины экрана двигает корабль, правая половина — стреляет.</p>
-            <button id="startButton">Начать игру</button>
         </div>
+
+        <!-- КНОПКА ПАУЗЫ -->
+        <button id="pauseBtn">⏸ ПАУЗА</button>
+
+        <!-- МЕНЮ ПАУЗЫ -->
+        <div id="pauseMenu">
+            <div id="pauseMenuContent">
+                <h2>⏸ ПАУЗА</h2>
+                <button id="resumeBtn">▶ ПРОДОЛЖИТЬ</button>
+                <button id="restartBtn">🔄 НАЧАТЬ ЗАНОВО</button>
+                <button id="quitBtn">🏠 ВЫЙТИ В МЕНЮ</button>
+            </div>
+        </div>
+
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
     </div>
-    <canvas id="gameCanvas" width="900" height="650"></canvas>
+
     <script src="game.js"></script>
 </body>
 </html>

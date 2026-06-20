@@ -7,31 +7,206 @@ body {
     height: 100vh;
     overflow: hidden;
     color: #fff;
+    font-family: 'Courier New', Courier, monospace;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 #game-container {
     position: relative;
     border: 2px solid #333;
     box-shadow: 0 0 50px rgba(0, 240, 255, 0.15);
-}
-
-canvas {
-    display: block;
-    background: #000;
-    cursor: crosshair;
-}
-
-/* Эффект легкого свечения */
-canvas {
-    filter: drop-shadow(0 0 2px #00f0ff);
-}
-#game-container {
-    overflow-x: auto; /* Появится скролл, если уровень шире экрана */
+    overflow-x: auto;
     max-width: 95vw;
+    border-radius: 8px;
 }
+
 canvas {
     display: block;
     background: #000;
     cursor: crosshair;
-    /* Убери здесь width: 800px! */
+    filter: drop-shadow(0 0 4px rgba(0, 240, 255, 0.5));
+}
+
+/* === ГЛАВНОЕ МЕНЮ === */
+#mainMenu {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.94);
+    z-index: 10;
+}
+
+#menuContent {
+    text-align: center;
+    padding: 30px 40px;
+    border: 1px solid rgba(0, 255, 255, 0.25);
+    background: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.15);
+}
+
+#menuContent h1 {
+    margin: 0 0 10px;
+    font-size: 32px;
+    color: #00f0ff;
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+}
+
+#menuContent p {
+    margin: 0 0 20px;
+    color: #fff;
+    font-size: 14px;
+}
+
+#levelSelector {
+    margin: 10px 0;
+}
+
+#levelSelector span {
+    margin-right: 10px;
+    font-size: 16px;
+    color: #fff;
+}
+
+#levelSelector button {
+    margin-right: 6px;
+    padding: 8px 14px;
+    border: 1px solid #00f0ff;
+    background: transparent;
+    color: #00f0ff;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: 'Courier New', Courier, monospace;
+    transition: all 0.2s;
+}
+
+#levelSelector button:hover {
+    background: rgba(0, 255, 255, 0.2);
+}
+
+#levelSelector button.selected {
+    background: #00f0ff;
+    color: #000;
+}
+
+#controlsHint {
+    margin: 10px 0 0;
+    font-size: 13px;
+    color: #b8f1ff;
+    line-height: 1.6;
+}
+
+#startButton {
+    margin-top: 16px;
+    padding: 12px 24px;
+    border: 2px solid #00f0ff;
+    background: #00f0ff;
+    color: #000;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+#startButton:hover {
+    background: #fff;
+    border-color: #fff;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+/* === КНОПКА ПАУЗЫ === */
+#pauseBtn {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 15;
+    padding: 8px 16px;
+    border: 1px solid #00f0ff;
+    background: rgba(0, 0, 0, 0.7);
+    color: #00f0ff;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: 'Courier New', Courier, monospace;
+    transition: all 0.2s;
+}
+
+#pauseBtn:hover {
+    background: #00f0ff;
+    color: #000;
+}
+
+/* === МЕНЮ ПАУЗЫ === */
+#pauseMenu {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 20;
+    align-items: center;
+    justify-content: center;
+}
+
+#pauseMenuContent {
+    text-align: center;
+    padding: 30px 40px;
+    border: 1px solid rgba(255, 200, 0, 0.4);
+    background: rgba(0, 0, 0, 0.9);
+    box-shadow: 0 0 40px rgba(255, 200, 0, 0.2);
+}
+
+#pauseMenuContent h2 {
+    margin: 0 0 20px;
+    font-size: 28px;
+    color: #ffc800;
+    text-shadow: 0 0 20px rgba(255, 200, 0, 0.5);
+}
+
+#pauseMenuContent button {
+    display: block;
+    width: 220px;
+    margin: 10px auto;
+    padding: 12px;
+    border: 2px solid #ffc800;
+    background: transparent;
+    color: #ffc800;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: 'Courier New', Courier, monospace;
+    transition: all 0.2s;
+}
+
+#pauseMenuContent button:hover {
+    background: #ffc800;
+    color: #000;
+    box-shadow: 0 0 15px rgba(255, 200, 0, 0.5);
+}
+
+/* === АДАПТАЦИЯ ДЛЯ МОБИЛЬНЫХ === */
+@media (max-width: 600px) {
+    #menuContent {
+        padding: 20px;
+        width: 90%;
+    }
+    
+    #menuContent h1 {
+        font-size: 24px;
+    }
+    
+    #levelSelector button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    
+    #pauseMenuContent {
+        width: 80%;
+        padding: 20px;
+    }
+    
+    #pauseMenuContent button {
+        width: 100%;
+    }
 }
